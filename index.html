@@ -1,0 +1,486 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1.0,viewport-fit=cover,interactive-widget=resizes-content"/>
+<meta name="color-scheme" content="light"/>
+<meta name="theme-color" content="#2563EB"/>
+<meta name="apple-mobile-web-app-capable" content="yes"/>
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"/>
+<title>STRATIX — Business Intelligence Platform</title>
+<link rel="icon" type="image/svg+xml" href="favicon.svg"/>
+<link rel="icon" type="image/png" sizes="32x32" href="icon-32.png"/>
+<link rel="apple-touch-icon" href="icon-192.png"/>
+<link rel="manifest" href="manifest.json"/>
+<meta name="apple-mobile-web-app-capable" content="yes"/>
+<meta name="apple-mobile-web-app-title" content="STRATIX"/>
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@600;700;800&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet"/>
+<link rel="stylesheet" href="style.css"/>
+<link rel="stylesheet" href="style_patch.css"/>
+<style>
+/* ── Shell visibility ─────────────────────────────────────────────── */
+.login-screen{display:none}.login-screen.on{display:flex}
+#appShell{display:none}#appShell.on{display:flex;flex-direction:column;height:100vh;overflow:hidden}
+#introOverlay{display:none}#introOverlay.on{display:flex}
+
+/* ── Login split layout ───────────────────────────────────────────── */
+.lsplit{display:flex;min-height:100vh;width:100%;position:relative;z-index:10}
+.lbg{display:none}.lgrid{display:none}
+
+/* ── LEFT PANEL — dark blue gradient ─────────────────────────────── */
+.lpL{
+  flex:1;display:flex;flex-direction:column;justify-content:space-between;
+  padding:52px 56px;position:relative;overflow:hidden;
+  background:linear-gradient(145deg,#1E3A8A 0%,#1D4ED8 55%,#2563EB 100%);
+}
+.lpL::before{display:none}
+.lbg-orb{display:none}
+.lico{width:54px;height:54px;background:rgba(255,255,255,.18);border:1.5px solid rgba(255,255,255,.35);border-radius:15px;display:flex;align-items:center;justify-content:center;font-family:"Syne",sans-serif;font-weight:800;font-size:21px;color:#fff;flex-shrink:0}
+.lname{font-family:"Syne",sans-serif;font-size:26px;font-weight:800;letter-spacing:5px;color:#fff}
+.ltag{font-size:10px;color:rgba(255,255,255,.7);letter-spacing:3px;text-transform:uppercase;margin-top:2px}
+.lhead{font-family:"Syne",sans-serif;font-size:clamp(24px,3vw,44px);font-weight:800;line-height:1.1;margin-bottom:16px;color:#fff;background:none;-webkit-text-fill-color:#fff}
+.lsub2{font-size:15px;color:rgba(255,255,255,.8);line-height:1.65;margin-bottom:32px;max-width:460px}
+.lfeats{display:flex;flex-direction:column;gap:11px;margin-bottom:32px}
+.lfeat{display:flex;align-items:center;gap:14px;padding:12px 16px;border-radius:12px;background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.18);transition:.2s}
+.lfeat:hover{background:rgba(255,255,255,.18)}
+.lfico{width:36px;height:36px;border-radius:10px;flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:16px;background:rgba(255,255,255,.2);border:1px solid rgba(255,255,255,.28)}
+.lfn{font-size:13px;font-weight:600;color:#fff}
+.lfns{font-size:11px;color:rgba(255,255,255,.7);margin-top:1px}
+.lstats{display:flex;gap:10px;flex-wrap:wrap}
+.lstat{padding:7px 14px;background:rgba(255,255,255,.15);border:1px solid rgba(255,255,255,.22);border-radius:22px;display:flex;align-items:center;gap:7px}
+.lsn{font-family:"Syne",sans-serif;font-size:15px;font-weight:800;color:#fff}
+.lsl{font-size:11px;color:rgba(255,255,255,.7)}
+.lverticals{display:flex;gap:8px;flex-wrap:wrap;margin-top:20px}
+.lvbadge{padding:5px 12px;border-radius:20px;font-size:11px;font-weight:700;border:1px solid rgba(255,255,255,.3)!important;background:rgba(255,255,255,.15)!important;color:#fff!important;white-space:nowrap}
+
+/* ── RIGHT PANEL — clean white form ──────────────────────────────── */
+.lpR{width:480px;flex-shrink:0;overflow-y:auto;background:#FFFFFF}
+.lfw{width:100%;padding:48px 44px;min-height:100%;display:flex;flex-direction:column}
+
+/* ── Form header ──────────────────────────────────────────────────── */
+.ltitle{font-family:"Plus Jakarta Sans","Syne",sans-serif;font-size:26px;font-weight:800;margin-bottom:5px;color:#0F172A}
+.ltitlesub{font-size:14px;color:#475569;margin-bottom:24px;font-weight:400}
+
+/* ── Sign In / Register tabs ──────────────────────────────────────── */
+.ltabs{display:flex;background:#F1F5F9;border:1px solid #E2E8F0;border-radius:12px;padding:4px;gap:4px;margin-bottom:24px}
+.ltab{flex:1;padding:11px;border:none;background:transparent;color:#64748B;font-family:"Inter",sans-serif;font-size:14px;font-weight:600;border-radius:9px;cursor:pointer;transition:.2s;-webkit-tap-highlight-color:transparent}
+.ltab.on{background:#2563EB;color:#FFFFFF;box-shadow:0 2px 10px rgba(37,99,235,.3)}
+
+/* ── Message box ──────────────────────────────────────────────────── */
+.lmsg{padding:11px 14px;border-radius:10px;font-size:13px;margin-bottom:14px;display:none;align-items:center;gap:8px;line-height:1.5}
+.lmsg.er{background:rgba(239,68,68,.08);border:1px solid rgba(239,68,68,.25);color:#DC2626;display:flex}
+.lmsg.ok{background:rgba(16,185,129,.08);border:1px solid rgba(16,185,129,.25);color:#059669;display:flex}
+
+/* ── Form fields ──────────────────────────────────────────────────── */
+.lf{margin-bottom:16px}
+.lf label{display:block;font-size:11.5px;font-weight:700;color:#374151;letter-spacing:.7px;text-transform:uppercase;margin-bottom:7px}
+.lf input,.lf select{
+  width:100%;
+  background:#FFFFFF;
+  border:1.5px solid #D1D5DB;
+  border-radius:10px;
+  padding:12px 14px;
+  color:#111827;
+  font-family:"Inter",sans-serif;
+  font-size:14px;
+  outline:none;
+  transition:.2s;
+  -webkit-appearance:none;
+  appearance:none;
+}
+.lf input:focus,.lf select:focus{border-color:#2563EB;box-shadow:0 0 0 3px rgba(37,99,235,.12);background:#FAFBFF}
+.lf input::placeholder{color:#9CA3AF;font-size:13px}
+.lf select{background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%236B7280' stroke-width='1.5' fill='none' stroke-linecap='round'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 14px center;padding-right:36px}
+.lf select option{background:#FFFFFF;color:#111827}
+
+/* ── Password wrapper ─────────────────────────────────────────────── */
+.lr2{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.pw-wrap{position:relative}
+.pw-wrap input{padding-right:46px!important;width:100%!important}
+.pw-eye{position:absolute;right:12px;top:50%;transform:translateY(-50%);background:none;border:none;cursor:pointer;font-size:17px;color:#6B7280;padding:4px;line-height:1;transition:.15s}
+.pw-eye:hover{color:#374151}
+
+/* ── Password strength bar ────────────────────────────────────────── */
+.lstr{display:flex;gap:4px;margin-top:7px}
+.lss{flex:1;height:3px;border-radius:2px;background:#E5E7EB;transition:.3s}
+.lsslbl{font-size:11px;color:#6B7280;margin-top:4px}
+
+/* ── Beta badge ───────────────────────────────────────────────────── */
+.lbeta{display:flex;align-items:flex-start;gap:10px;padding:12px 14px;background:rgba(16,185,129,.06);border:1px solid rgba(16,185,129,.2);border-radius:10px;margin-bottom:14px}
+.lbeta-txt{font-size:13px;font-weight:700;color:#059669}
+.lbeta-sub{font-size:11px;color:#6B7280;margin-top:1px}
+
+/* ── Primary button ───────────────────────────────────────────────── */
+.lbtn{width:100%;padding:14px;border:none;border-radius:11px;cursor:pointer;background:linear-gradient(135deg,#2563EB,#1D4ED8);color:#FFFFFF;font-family:"Plus Jakarta Sans","Syne",sans-serif;font-weight:700;font-size:15px;letter-spacing:.3px;transition:.2s;margin-top:4px;box-shadow:0 3px 12px rgba(37,99,235,.3);-webkit-tap-highlight-color:transparent}
+.lbtn:hover{transform:translateY(-1px);box-shadow:0 6px 20px rgba(37,99,235,.4)}
+.lbtn:active{transform:none;box-shadow:0 2px 8px rgba(37,99,235,.25)}
+
+/* ── Google Sign-in button ────────────────────────────────────────── */
+.lbtn-google{width:100%;padding:12px 14px;border:1.5px solid #D1D5DB;border-radius:11px;background:#FFFFFF;color:#111827;font-family:"Inter",sans-serif;font-size:14px;font-weight:500;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:10px;transition:.2s;margin-top:8px;-webkit-tap-highlight-color:transparent;box-shadow:0 1px 3px rgba(0,0,0,.08)}
+.lbtn-google:hover{border-color:#2563EB;background:#F8FAFF;transform:translateY(-1px);box-shadow:0 4px 12px rgba(37,99,235,.12)}
+.lbtn-google:active{transform:none}
+
+/* ── Footer links ─────────────────────────────────────────────────── */
+.lftr{text-align:center;margin-top:14px;font-size:13px;color:#6B7280}
+.lftr a{color:#2563EB;text-decoration:none;font-weight:600}
+.lftr a:hover{color:#1D4ED8;text-decoration:underline}
+.lagree{font-size:11.5px;color:#6B7280;text-align:center;margin-top:12px;line-height:1.7}
+.lagree a{color:#2563EB;text-decoration:none}
+.ltrust{display:flex;gap:7px;flex-wrap:wrap;margin-top:18px;justify-content:center}
+.ltb{font-size:11px;color:#6B7280;background:#F9FAFB;border:1px solid #E5E7EB;border-radius:22px;padding:5px 12px;font-weight:500}
+.llegalf{text-align:center;margin-top:16px;padding-top:14px;border-top:1px solid #E5E7EB;font-size:12px;color:#9CA3AF;line-height:2}
+.llegalf a{color:#2563EB;text-decoration:none}
+
+/* ── Terms/Privacy modal ──────────────────────────────────────────── */
+.ppov{display:none;position:fixed;inset:0;z-index:9999;background:rgba(0,0,0,.5);backdrop-filter:blur(4px);overflow-y:auto;padding:28px 16px}
+.ppov.on{display:block}
+.ppbox{background:#FFFFFF;border:1px solid #E2E8F0;border-radius:20px;max-width:720px;margin:0 auto;padding:36px 40px;box-shadow:0 20px 60px rgba(0,0,0,.2)}
+.ppbox-hd{display:flex;align-items:center;gap:14px;margin-bottom:6px}
+.ppbox-logo{width:42px;height:42px;background:linear-gradient(135deg,#2563EB,#1D4ED8);border-radius:11px;display:flex;align-items:center;justify-content:center;font-family:"Syne",sans-serif;font-weight:800;font-size:16px;color:#fff;flex-shrink:0}
+.ppbox h2{font-family:"Syne",sans-serif;font-size:20px;font-weight:800;color:#0F172A}
+.ppdt{font-size:11px;color:#94A3B8;margin-bottom:24px;margin-left:56px}
+.pp-tabs{display:flex;gap:6px;margin-bottom:22px;background:#F8FAFC;border:1px solid #E2E8F0;border-radius:10px;padding:4px}
+.pp-tab{flex:1;padding:9px;border:none;background:transparent;color:#64748B;font-size:13px;font-weight:600;border-radius:7px;cursor:pointer;transition:.2s;text-align:center}
+.pp-tab.on{background:rgba(37,99,235,.08);color:#2563EB;border:1px solid rgba(37,99,235,.2)}
+.pp-section{display:none}.pp-section.on{display:block}
+.ppcb{background:rgba(37,99,235,.08);border:1px solid rgba(37,99,235,.2);color:#2563EB;padding:8px 18px;border-radius:9px;font-size:13px;font-weight:600;cursor:pointer;float:right;margin-bottom:16px;transition:.2s}
+.ppcb:hover{background:rgba(37,99,235,.15)}
+.pps{margin-bottom:12px;padding:14px 16px;background:#F8FAFC;border:1px solid #E2E8F0;border-radius:10px}
+.pps h3{font-size:11px;font-weight:700;color:#2563EB;margin-bottom:7px;text-transform:uppercase;letter-spacing:.8px}
+.pps p,.pps li{font-size:13px;color:#475569;line-height:1.8}
+.pps ul{padding-left:18px}.pps li{margin-bottom:3px}.pps a{color:#2563EB}
+.pp-accept{display:block;width:100%;padding:13px;background:linear-gradient(135deg,#2563EB,#1D4ED8);border:none;border-radius:12px;color:#fff;font-family:"Syne",sans-serif;font-weight:800;font-size:14px;cursor:pointer;margin-top:20px;box-shadow:0 2px 10px rgba(37,99,235,.25)}
+.pp-accept:hover{box-shadow:0 6px 20px rgba(37,99,235,.35)}
+
+/* ── Mobile overrides ─────────────────────────────────────────────── */
+@media(max-width:900px){.lpL{display:none}.lpR{width:100%}.lfw{padding:40px 28px}}
+@media(max-width:480px){
+  .lfw{padding:28px 20px;padding-top:max(28px,env(safe-area-inset-top,28px))}
+  .lr2{grid-template-columns:1fr}
+  .lf input,.lf select{font-size:16px!important;padding:13px 14px!important}
+  .lbtn,.lbtn-google{min-height:50px;font-size:15px}
+  .ltrust{display:none}
+}
+</style>
+
+<style id="google-btn-css">
+.lbtn-google{width:100%;padding:12px 14px;border:1.5px solid rgba(37,99,235,.2);border-radius:12px;background:#fff;color:#0F172A;font-family:"Inter",sans-serif;font-size:14px;font-weight:500;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:10px;transition:.2s;margin-top:8px;-webkit-tap-highlight-color:transparent}
+.lbtn-google:hover{border-color:#2563EB;background:rgba(37,99,235,.04);transform:translateY(-1px);box-shadow:0 4px 12px rgba(37,99,235,.12)}
+.lbtn-google:active{transform:translateY(0)}
+/* Mobile login full-screen */
+@media(max-width:600px){
+  .lpR{width:100%!important;min-height:100vh}
+  .lfw{padding:28px 20px 40px!important;padding-top:max(44px,env(safe-area-inset-top))!important}
+  .lbtn,.lbtn-google{min-height:48px;font-size:15px}
+  .lf input,.lf select{padding:13px 14px!important;font-size:16px!important}/* prevents iOS zoom */
+  .lr2{grid-template-columns:1fr!important}
+}
+</style>
+</head>
+<body>
+
+<div class="login-screen" id="loginScreen">
+  <div class="lbg"><div class="lorb lorb1"></div><div class="lorb lorb2"></div><div class="lorb lorb3"></div></div>
+  <div class="lgrid"></div>
+  <div class="lsplit">
+    <div class="lpL">
+      <div>
+        <div class="llogo"><div class="lico">SX</div><div><div class="lname">STRATIX</div><div class="ltag">Analyze &middot; Decide &middot; Grow</div></div></div>
+        <div class="lhead">India's Most Powerful<br/>Business Intelligence<br/>Platform</div>
+        <div class="lsub2">Built for transport operators, factory owners, traders &amp; service businesses. Complete financial control in one app — free during beta.</div>
+        <div class="lfeats">
+          <div class="lfeat"><div class="lfico">📊</div><div><div class="lfn">Real-Time Analytics Dashboard</div><div class="lfns">Revenue, expenses &amp; profit — always live</div></div></div>
+          <div class="lfeat"><div class="lfico">🚛</div><div><div class="lfn">12 Logistics Documents</div><div class="lfns">LR, E-Way Bill, Freight Invoice, POD &amp; more</div></div></div>
+          <div class="lfeat"><div class="lfico">💸</div><div><div class="lfn">Payroll with PF, ESI &amp; TDS</div><div class="lfns">Auto-calculated as per Budget 2025</div></div></div>
+          <div class="lfeat"><div class="lfico">🤖</div><div><div class="lfn">AI Business Advisor</div><div class="lfns">Powered by Claude AI &middot; Your data, your advice</div></div></div>
+          <div class="lfeat"><div class="lfico">📱</div><div><div class="lfn">WhatsApp Payment Reminders</div><div class="lfns">Collect dues 3x faster with one tap</div></div></div>
+          <div class="lfeat"><div class="lfico">🔒</div><div><div class="lfn">100% Private &middot; On Your Device</div><div class="lfns">Data never leaves your browser. No server.</div></div></div>
+        </div>
+        <div class="lverticals">
+          <span class="lvbadge" style="color:#2563EB;border-color:rgba(37,99,235,.25);background:rgba(37,99,235,.07)">🚛 Transport</span>
+          <span class="lvbadge" style="color:#4f9ef0;border-color:rgba(37,99,235,.25);background:rgba(37,99,235,.07)">🏭 Manufacturing</span>
+          <span class="lvbadge" style="color:#00d68f;border-color:rgba(37,99,235,.25);background:rgba(37,99,235,.07)">🛒 Trading</span>
+          <span class="lvbadge" style="color:#9b5de5;border-color:rgba(155,93,229,.25);background:rgba(155,93,229,.07)">🔧 Services</span>
+        </div>
+      </div>
+      <div class="lstats">
+        <div class="lstat"><div class="lsn">40+</div><div class="lsl">Features</div></div>
+        <div class="lstat"><div class="lsn">12</div><div class="lsl">Logistics Docs</div></div>
+        <div class="lstat"><div class="lsn">&#x20B9;0</div><div class="lsl">Setup Cost</div></div>
+        <div class="lstat"><div class="lsn">FREE</div><div class="lsl">Beta</div></div>
+      </div>
+    </div>
+    <div class="lpR"><div class="lfw">
+      <div class="ltitle" id="lTitle">Welcome Back</div>
+      <div class="ltitlesub" id="lSub">Sign in to your STRATIX account</div>
+      <div class="ltabs">
+        <button class="ltab on" id="lTL" onclick="lTab('login')">Sign In</button>
+        <button class="ltab" id="lTR" onclick="lTab('register')">Create Account</button>
+      </div>
+      <div class="lmsg" id="lMsg"></div>
+      <div id="lLF">
+        <div class="lf"><label>Email Address</label><input type="email" id="lEm" placeholder="you@business.com" onkeydown="if(event.key==='Enter')lDoLogin()"/></div>
+        <div class="lf"><label>Password</label>
+          <div class="pw-wrap">
+            <input type="password" id="lPw" placeholder="Your password" onkeydown="if(event.key==='Enter')lDoLogin()" style="padding-right:44px;width:100%"/>
+            <button type="button" class="pw-eye" onclick="var i=document.getElementById('lPw');i.type=i.type==='password'?'text':'password';this.textContent=i.type==='password'?'&#x1F441;':'&#x1F648'">&#x1F441;</button>
+          </div>
+        </div>
+        <button class="lbtn" onclick="lDoLogin()">SIGN IN &#x2192;</button>        <div style="display:flex;align-items:center;gap:12px;margin:14px 0 4px"><div style="flex:1;height:1px;background:rgba(37,99,235,.12)"></div><span style="font-size:12px;color:#94A3B8;white-space:nowrap">or continue with</span><div style="flex:1;height:1px;background:rgba(37,99,235,.12)"></div></div>
+        <button class="lbtn-google" onclick="lDoGoogleSignIn()" type="button">
+          <svg width="18" height="18" viewBox="0 0 48 48" style="flex-shrink:0"><path fill="#4285F4" d="M46.98 24.55c0-1.57-.15-3.09-.38-4.55H24v9.02h12.94c-.58 2.96-2.26 5.48-4.78 7.18l7.73 6c4.51-4.18 7.09-10.36 7.09-17.65z"/><path fill="#34A853" d="M24 48c6.48 0 11.93-2.13 15.89-5.81l-7.73-6c-2.15 1.45-4.92 2.3-8.16 2.3-6.26 0-11.57-4.22-13.47-9.91l-7.98 6.19C6.51 42.62 14.62 48 24 48z"/><path fill="#FBBC05" d="M10.53 28.59c-.48-1.45-.76-2.99-.76-4.59s.27-3.14.76-4.59l-7.98-6.19C.92 16.46 0 20.12 0 24c0 3.88.92 7.54 2.56 10.78l7.97-6.19z"/><path fill="#EA4335" d="M24 9.5c3.54 0 6.71 1.22 9.21 3.6l6.85-6.85C35.9 2.38 30.47 0 24 0 14.62 0 6.51 5.38 2.56 13.22l7.98 6.19C12.43 13.72 17.74 9.5 24 9.5z"/></svg>
+          Sign in with Google
+        </button>
+        <div class="lftr" style="margin-top:14px">
+          <a href="#" onclick="lMsg2('To reset your password, email Stratixapp@gmail.com','ok');return false" style="color:#94A3B8;font-size:12px">Forgot password?</a>
+          &nbsp;&middot;&nbsp;
+          <a href="#" onclick="lTab('register');return false">Create account</a>
+        </div>
+      </div>
+      <div id="lRF" style="display:none">
+        <div class="lr2">
+          <div class="lf"><label>Full Name *</label><input type="text" id="rN" placeholder="Rajesh Kumar" maxlength="80"/></div>
+          <div class="lf"><label>Phone</label><input type="tel" id="rPh" placeholder="+91 98765..." maxlength="15"/></div>
+        </div>
+        <div class="lf"><label>Business Name *</label><input type="text" id="rBz" placeholder="Your Company Pvt Ltd" maxlength="100"/></div>
+        <div class="lf"><label>Business Type *</label>
+          <select id="rBT">
+            <option value="logistics">&#x1F69B; Transport / Logistics / Fleet</option>
+            <option value="msme">&#x1F3E2; MSME / Services / Contractor</option>
+            <option value="retail">&#x1F6D2; Retail Shop / Trading</option>
+            <option value="factory">&#x1F3ED; Manufacturing / Factory</option>
+            <option value="other">&#x1F4BC; Other / All Tools</option>
+          </select>
+        </div>
+        <div class="lf"><label>Email Address *</label><input type="email" id="rEm" placeholder="you@business.com" maxlength="120"/></div>
+        <div class="lf"><label>Password *</label>
+          <div class="pw-wrap">
+            <input type="password" id="rPw" placeholder="Min 8 characters" maxlength="64" oninput="lStr(this.value)" style="padding-right:44px;width:100%"/>
+            <button type="button" class="pw-eye" onclick="var i=document.getElementById('rPw');i.type=i.type==='password'?'text':'password';this.textContent=i.type==='password'?'&#x1F441;':'&#x1F648'">&#x1F441;</button>
+          </div>
+          <div class="lstr"><div class="lss" id="ls1"></div><div class="lss" id="ls2"></div><div class="lss" id="ls3"></div><div class="lss" id="ls4"></div></div>
+          <div class="lsslbl" id="lSL">Enter a strong password</div>
+        </div>
+        <div class="lbeta">
+          <div style="font-size:18px;flex-shrink:0">&#x1F389;</div>
+          <div><div class="lbeta-txt">FREE during Beta &mdash; All 40+ features unlocked</div><div class="lbeta-sub">Premium plans coming soon &middot; No credit card needed</div></div>
+        </div>
+                <div style="display:flex;align-items:center;gap:12px;margin:14px 0 4px"><div style="flex:1;height:1px;background:rgba(37,99,235,.12)"></div><span style="font-size:12px;color:#94A3B8;white-space:nowrap">or continue with</span><div style="flex:1;height:1px;background:rgba(37,99,235,.12)"></div></div>
+        <button class="lbtn-google" onclick="lDoGoogleSignIn()" type="button">
+          <svg width="18" height="18" viewBox="0 0 48 48" style="flex-shrink:0"><path fill="#4285F4" d="M46.98 24.55c0-1.57-.15-3.09-.38-4.55H24v9.02h12.94c-.58 2.96-2.26 5.48-4.78 7.18l7.73 6c4.51-4.18 7.09-10.36 7.09-17.65z"/><path fill="#34A853" d="M24 48c6.48 0 11.93-2.13 15.89-5.81l-7.73-6c-2.15 1.45-4.92 2.3-8.16 2.3-6.26 0-11.57-4.22-13.47-9.91l-7.98 6.19C6.51 42.62 14.62 48 24 48z"/><path fill="#FBBC05" d="M10.53 28.59c-.48-1.45-.76-2.99-.76-4.59s.27-3.14.76-4.59l-7.98-6.19C.92 16.46 0 20.12 0 24c0 3.88.92 7.54 2.56 10.78l7.97-6.19z"/><path fill="#EA4335" d="M24 9.5c3.54 0 6.71 1.22 9.21 3.6l6.85-6.85C35.9 2.38 30.47 0 24 0 14.62 0 6.51 5.38 2.56 13.22l7.98 6.19C12.43 13.72 17.74 9.5 24 9.5z"/></svg>
+          Sign up with Google
+        </button><div style="display:flex;align-items:center;gap:12px;margin:8px 0"><div style="flex:1;height:1px;background:rgba(37,99,235,.12)"></div><span style="font-size:12px;color:#94A3B8;white-space:nowrap">or</span><div style="flex:1;height:1px;background:rgba(37,99,235,.12)"></div></div><button class="lbtn" onclick="lDoReg()">CREATE ACCOUNT &#x2192;</button>
+        <div class="lftr" style="margin-top:13px">Already have an account? <a href="#" onclick="lTab('login');return false">Sign In</a></div>
+        <div class="lagree">By registering you agree to our <a href="#" onclick="openPP('terms');return false">Terms of Service</a> &amp; <a href="#" onclick="openPP('privacy');return false">Privacy Policy</a></div>
+      </div>
+      <div class="ltrust">
+        <div class="ltb">&#x1F4BE; Your Data, Your Device</div>
+        <div class="ltb">&#x1F4F4; Works Offline</div>
+        <div class="ltb">&#x1F1EE;&#x1F1F3; Made for India</div>
+        <div class="ltb">&#x1F512; SHA-256 Passwords</div>
+      </div>
+      <div class="llegalf">
+        <a href="#" onclick="openPP('terms');return false">&#x1F4C4; Terms of Service</a> &nbsp;&middot;&nbsp;
+        <a href="#" onclick="openPP('privacy');return false">&#x1F512; Privacy Policy</a> &nbsp;&middot;&nbsp;
+        <a href="mailto:Stratixapp@gmail.com">&#x2709; Support</a><br/>
+        &copy; 2026 STRATIX &middot; Made for Indian Entrepreneurs &#x1F1EE;&#x1F1F3;
+      </div>
+    </div></div>
+  </div>
+</div>
+
+<!-- TERMS & PRIVACY MODAL -->
+<div class="ppov" id="ppov" onclick="if(event.target===this)closePP()">
+  <div class="ppbox">
+    <button class="ppcb" onclick="closePP()">&#x2715; Close</button>
+    <div class="ppbox-hd">
+      <div class="ppbox-logo">SX</div>
+      <h2>STRATIX Legal Documents</h2>
+    </div>
+    <div class="ppdt">Last updated: March 2026 &middot; STRATIX v5.0 &middot; Governing law: India</div>
+    <div class="pp-tabs">
+      <button class="pp-tab on" id="pp-tab-terms" onclick="ppSwitch('terms')">&#x1F4C4; Terms of Service</button>
+      <button class="pp-tab" id="pp-tab-privacy" onclick="ppSwitch('privacy')">&#x1F512; Privacy Policy</button>
+    </div>
+    <div class="pp-section on" id="pp-terms">
+      <div class="pps"><h3>1. Acceptance of Terms</h3><p>By accessing or using STRATIX ("the Application"), you agree to be bound by these Terms of Service. If you do not agree, do not use the Application. By creating an account, you confirm you are at least 18 years old and have the legal authority to enter these Terms on behalf of yourself or your business.</p></div>
+      <div class="pps"><h3>2. Description of Service</h3><p>STRATIX is a business intelligence and financial management application for Indian entrepreneurs. It provides financial tracking, logistics documents, payroll calculations, GST tools, inventory management, and AI advisory services. STRATIX operates entirely within your browser using local storage — no business data is transmitted to our servers.</p></div>
+      <div class="pps"><h3>3. User Responsibilities</h3><ul><li>Maintain confidentiality of your login credentials.</li><li>Provide accurate information during registration.</li><li>Not use the Application for any unlawful purpose under Indian law.</li><li>Not reverse-engineer or extract the Application's source code.</li><li>Not use automated bots to access the Application.</li><li>Notify us at <a href="mailto:Stratixapp@gmail.com">Stratixapp@gmail.com</a> if you suspect unauthorised access.</li></ul></div>
+      <div class="pps"><h3>4. Data Storage &amp; Ownership</h3><p>All your business data is stored exclusively in your device's browser localStorage. You retain full ownership of all data. We do not access, view, or transfer your business data to any server. You are solely responsible for backing up your data via Settings &rarr; Export. STRATIX is not liable for data loss due to browser clearing or device failure.</p></div>
+      <div class="pps"><h3>5. AI Advisor Service</h3><p>The AI Advisor uses Anthropic's Claude API. When used, a summary of your business data is sent to Anthropic's servers via your personal API key. By using AI Advisor, you consent to this. STRATIX does not log AI conversations. AI responses are advisory only — not professional financial, legal, or tax advice.</p></div>
+      <div class="pps"><h3>6. Financial Disclaimer</h3><p>STRATIX provides tools and calculators — not professional advice. All GST calculations, payroll, TDS estimates, and financial data are indicative only. Tax laws change frequently. Always verify all calculations with a qualified Chartered Accountant (CA) before filing returns or making business decisions.</p></div>
+      <div class="pps"><h3>7. Beta Service &amp; Changes</h3><p>STRATIX is in Beta. Features may change without notice. We reserve the right to modify the service at any time. Before introducing paid plans, we will provide at least 30 days' advance notice to existing users.</p></div>
+      <div class="pps"><h3>8. Intellectual Property</h3><p>The STRATIX brand, logo, design, and codebase are the intellectual property of STRATIX. You may not copy or distribute the Application without written permission. Your business records belong entirely to you.</p></div>
+      <div class="pps"><h3>9. Limitation of Liability</h3><p>To the maximum extent permitted under Indian law, STRATIX shall not be liable for: (a) data loss; (b) loss of business or revenue; (c) indirect or consequential damages; (d) calculation errors; (e) service interruptions. Your sole remedy for dissatisfaction is to discontinue use.</p></div>
+      <div class="pps"><h3>10. Governing Law</h3><p>These Terms are governed by the laws of India. Disputes shall be subject to the exclusive jurisdiction of courts in Mumbai, Maharashtra. Contact <a href="mailto:Stratixapp@gmail.com">Stratixapp@gmail.com</a> before initiating formal proceedings.</p></div>
+      <div class="pps"><h3>11. Termination</h3><p>You may delete your account anytime via Settings &rarr; Clear All Data. We may terminate accounts that violate these Terms. Upon termination, your right to use the Application ceases immediately.</p></div>
+      <div class="pps"><h3>12. Changes to Terms</h3><p>We may update these Terms. We will notify you of material changes within the Application. Continued use constitutes acceptance of updated Terms. The latest version is always available in Settings &rarr; Privacy &amp; Terms.</p></div>
+    </div>
+    <div class="pp-section" id="pp-privacy">
+      <div class="pps"><h3>1. Data Controller</h3><p>STRATIX is the data controller for personal information processed in connection with the Application. Contact: <a href="mailto:Stratixapp@gmail.com">Stratixapp@gmail.com</a> | <a href="mailto:Stratixapp@gmail.com">stratix.app</a></p></div>
+      <div class="pps"><h3>2. Data We Collect</h3><ul><li><strong>Registration:</strong> Name, phone, business name, type, email, hashed password (SHA-256) — stored locally on your device only.</li><li><strong>Business data:</strong> Transactions, clients, employees, invoices, etc. — stored locally only.</li><li><strong>AI Advisor:</strong> Business summary sent to Anthropic Claude API only when you use this feature with your API key.</li><li><strong>Analytics:</strong> We do not collect usage analytics, page views, or behavioral data.</li></ul></div>
+      <div class="pps"><h3>3. How We Use Data</h3><ul><li>To provide the Application's features.</li><li>To authenticate your session.</li><li>To send service notifications if you provide email.</li><li>We never sell, rent, or share your data for marketing.</li><li>We display no advertisements.</li></ul></div>
+      <div class="pps"><h3>4. Local Storage &amp; Security</h3><p>All business data is stored exclusively in browser localStorage — it never leaves your device. Passwords use SHA-256 hashing with a salt. Your Anthropic API key is stored in sessionStorage (cleared on browser close). XSS protection is implemented throughout the Application.</p></div>
+      <div class="pps"><h3>5. Third-Party Services</h3><ul><li><strong>Anthropic Claude API:</strong> Only for AI Advisor if you enable it. Governed by <a href="https://anthropic.com/privacy">Anthropic's Privacy Policy</a>.</li><li><strong>Google Fonts:</strong> Font files load from Google's servers.</li><li>No other third-party services receive your business data.</li></ul></div>
+      <div class="pps"><h3>6. Your Rights — DPDP Act 2023</h3><ul><li>&#x2705; <strong>Access:</strong> Export all data via Settings &rarr; Export Data (JSON).</li><li>&#x2705; <strong>Correction:</strong> Edit any data directly in the Application.</li><li>&#x2705; <strong>Erasure:</strong> Delete all data via Settings &rarr; Clear All Data. Immediate &amp; irreversible.</li><li>&#x2705; <strong>Portability:</strong> Export as JSON for use in other applications.</li><li>&#x2705; <strong>Grievance:</strong> Email <a href="mailto:Stratixapp@gmail.com">Stratixapp@gmail.com</a> — response within 72 hours.</li></ul></div>
+      <div class="pps"><h3>7. Data Retention</h3><p>Data is retained on your device as long as you use the Application. We retain no copies on our servers. Clearing browser storage or reinstalling permanently deletes your data. Export regularly to prevent loss.</p></div>
+      <div class="pps"><h3>8. Children's Privacy</h3><p>STRATIX is not intended for persons under 18. We do not knowingly collect data from minors. Contact <a href="mailto:Stratixapp@gmail.com">Stratixapp@gmail.com</a> if you believe a minor has an account.</p></div>
+      <div class="pps"><h3>9. Security Breach Notification</h3><p>In the event of a security incident, we will notify affected users within 72 hours via their registered email, as required under the DPDP Act 2023. Since your business data is stored locally, most risks are on your device.</p></div>
+      <div class="pps"><h3>10. Cookie Policy</h3><p>STRATIX uses no cookies. We use browser localStorage and sessionStorage only for core functionality. No tracking, advertising, or analytics cookies are used.</p></div>
+      <div class="pps"><h3>11. Contact</h3><p>&#x1F4E7; Privacy: <a href="mailto:Stratixapp@gmail.com">Stratixapp@gmail.com</a><br/>&#x1F4E7; Support: <a href="mailto:Stratixapp@gmail.com">Stratixapp@gmail.com</a><br/>&#x1F4E7; Legal: <a href="mailto:Stratixapp@gmail.com">Stratixapp@gmail.com</a><br/>&#x1F310; Website: <a href="mailto:Stratixapp@gmail.com">stratix.app</a></p></div>
+    </div>
+    <button class="pp-accept" onclick="closePP()">&#x2713; I Understand &amp; Accept</button>
+  </div>
+</div>
+
+<!-- INTRO SPLASH -->
+<div id="introOverlay">
+  <div class="intro-logo">SX</div>
+  <div class="intro-text">STRATIX</div>
+  <div class="intro-sub">Analyze &middot; Decide &middot; Grow</div>
+  <div class="intro-dots"><span></span><span></span><span></span></div>
+</div>
+
+<!-- MAIN APP SHELL -->
+<div id="appShell">
+  <header id="topbar">
+    <button id="menuBtn" onclick="APP.toggleSidebar()">&#x2630;</button>
+    <div class="search-wrap" style="margin-left:12px">
+      <span class="search-icon">&#x1F50D;</span>
+      <input type="text" id="globalSearch" placeholder="Search sections, transactions, clients..." oninput="APP.globalSearch(this.value)"/>
+    </div>
+    <div class="topbar-right">
+      <button id="notifBtn" onclick="APP.showNotifications()">&#x1F514;<span id="notifDot"></span></button>
+      <div id="userBadgeTop" onclick="APP.navigate('settings')" style="cursor:pointer"></div>
+    </div>
+  </header>
+  <div id="appBody" style="display:flex;flex-direction:row;flex:1;overflow:hidden;height:calc(100vh - var(--top-h))">
+    <div id="sideOverlay" onclick="APP.closeSidebar()"></div>
+    <nav id="sidebar">
+      <div class="sidebar-logo">
+        <div class="logo-mark">SX</div>
+        <div><div class="logo-text">STRATIX</div><div class="logo-sub">Analyze &middot; Decide &middot; Grow</div></div>
+      </div>
+      <div id="sideNav"></div>
+      <div class="nav-footer"><div id="userBadgeSide"></div></div>
+    </nav>
+    <main id="mainContent"><div id="sectionContent"></div></main>
+  </div>
+  <nav id="bottomNav">
+    <div class="bn-row">
+      <button class="bn-btn active" id="bn-dashboard" onclick="APP.navigate('dashboard');setBN('dashboard')"><span class="bn-ico">&#x1F3E0;</span><span>Home</span></button>
+      <button class="bn-btn" id="bn-analytics" onclick="APP.navigate('analytics');setBN('analytics')"><span class="bn-ico">&#x1F4CA;</span><span>Analytics</span></button>
+      <button class="bn-btn" id="bn-logisticsdocs" onclick="APP.navigate('logisticsdocs');setBN('logisticsdocs')"><span class="bn-ico">&#x1F4CB;</span><span>Docs</span></button>
+      <button class="bn-btn" id="bn-whatsapp" onclick="APP.navigate('whatsapp');setBN('whatsapp')"><span class="bn-ico">&#x1F4F1;</span><span>WhatsApp</span></button>
+      <button class="bn-btn" id="bn-menu" onclick="APP.toggleSidebar()"><span class="bn-ico">&#x2630;</span><span>More</span></button>
+    </div>
+  </nav>
+</div>
+
+<!-- SCRIPTS — no Cloudflare, clean order -->
+<!-- Firebase SDK (compat v9) — loaded before auth.js -->
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-analytics-compat.js"></script>
+<script src="firebase_config.js"></script>
+<script src="auth.js"></script>
+<script src="store.js"></script>
+<script src="components.js"></script>
+<script src="upgrades.js"></script>
+<script src="analytics.js"></script>
+<script src="stratix_ai.js"></script>
+<script src="features.js"></script>
+<script src="logistics.js"></script>
+<script src="erp.js"></script>
+<script src="vertical.js"></script>
+<script src="v_transport.js"></script>
+<script src="v_retail.js"></script>
+<script src="v_services.js"></script>
+<script src="new_features.js"></script>
+<script src="app.js"></script>
+<script src="onboarding.js"></script>
+<script src="finance_deep.js"></script>
+<script src="v_factory_deep.js"></script>
+<script src="interconnect.js"></script>
+<script src="polish.js"></script>
+<script>
+var _selPlan="professional";
+function lTab(t){var isL=t==="login";document.getElementById("lLF").style.display=isL?"block":"none";document.getElementById("lRF").style.display=isL?"none":"block";document.getElementById("lTL").classList.toggle("on",isL);document.getElementById("lTR").classList.toggle("on",!isL);document.getElementById("lTitle").textContent=isL?"Welcome Back":"Create Account";document.getElementById("lSub").textContent=isL?"Sign in to your STRATIX account":"Start your free account today";lHideMsg();}
+function lMsg2(t,c){var b=document.getElementById("lMsg");b.innerHTML=(c==="er"?"&#x26A0;&#xFE0F; ":"&#x2705; ")+t;b.className="lmsg "+c;}
+function lHideMsg(){document.getElementById("lMsg").className="lmsg";}
+function lStr(v){var cl=["#EF4444","#F59E0B","#2563EB","#10B981"],lb=["Very Weak","Weak","Good","Strong &#x1F4AA;"],s=0;if(v.length>=8)s++;if(/[A-Z]/.test(v))s++;if(/[0-9]/.test(v))s++;if(/[^A-Za-z0-9]/.test(v))s++;["ls1","ls2","ls3","ls4"].forEach(function(id,i){document.getElementById(id).style.background=i<s?cl[s-1]:"#E2E8F0";});var l=document.getElementById("lSL");l.innerHTML=s>0?lb[s-1]:"Enter a strong password";l.style.color=s>0?cl[s-1]:"#94A3B8";}
+async function lDoLogin(){var em=document.getElementById("lEm").value.trim(),pw=document.getElementById("lPw").value;if(!em||!pw){lMsg2("Please fill in all fields","er");return;}lMsg2("Signing in...","ok");var r=await STRATIX_AUTH.login(em,pw);if(r.success){lMsg2("Welcome back! Loading dashboard...","ok");setTimeout(launchApp,900);}else{lMsg2(r.message,"er");}}
+async function lDoReg(){var n=document.getElementById("rN").value.trim(),p=document.getElementById("rPh").value.trim(),bz=document.getElementById("rBz").value.trim(),bt=document.getElementById("rBT").value,em=document.getElementById("rEm").value.trim(),pw=document.getElementById("rPw").value;if(!n||!bz||!em||!pw){lMsg2("Please fill in all required fields","er");return;}if(!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(em)){lMsg2("Please enter a valid email address","er");return;}if(p&&p.replace(/[^0-9]/g,"").length<10){lMsg2("Enter a valid 10-digit phone number","er");return;}if(pw.length<8){lMsg2("Password must be at least 8 characters","er");return;}if(n.length<2){lMsg2("Enter your full name","er");return;}if(bz.length<2){lMsg2("Enter your business name","er");return;}lMsg2("Creating account...","ok");var r=await STRATIX_AUTH.register({name:n,phone:p,biz:bz,bizType:bt,email:em,pass:pw,plan:_selPlan});if(r.success){lMsg2("Account created! Loading dashboard...","ok");setTimeout(launchApp,900);}else{lMsg2(r.message,"er");}}
+function openPP(tab){document.getElementById("ppov").classList.add("on");document.body.style.overflow="hidden";if(tab)ppSwitch(tab);}
+function closePP(){document.getElementById("ppov").classList.remove("on");document.body.style.overflow="";}
+function ppSwitch(tab){["terms","privacy"].forEach(function(t){document.getElementById("pp-tab-"+t).classList.toggle("on",t===tab);document.getElementById("pp-"+t).classList.toggle("on",t===tab);});}
+document.addEventListener("keydown",function(e){if(e.key==="Escape")closePP();});
+function setBN(id){document.querySelectorAll('.bn-btn').forEach(function(b){b.classList.remove('active');});var el=document.getElementById('bn-'+id);if(el)el.classList.add('active');}
+function doLogout(){document.getElementById('appShell').classList.remove('on');document.getElementById('loginScreen').classList.add('on');document.getElementById('lEm').value='';document.getElementById('lPw').value='';lTab('login');lHideMsg();}
+function launchApp(){document.getElementById('loginScreen').classList.remove('on');document.getElementById('appShell').classList.add('on');var ov=document.getElementById('introOverlay');if(ov&&!sessionStorage.getItem('sx_launched')){ov.classList.add('on');sessionStorage.setItem('sx_launched','1');setTimeout(function(){ov.classList.remove('on');APP.init();if(typeof onboardingReady==='function')onboardingReady();},1600);}else{if(ov)ov.classList.remove('on');APP.init();if(typeof onboardingReady==='function')onboardingReady();}}
+
+async function lDoGoogleSignIn(){
+  lMsg2('Opening Google Sign-in...','ok');
+  var r = await STRATIX_AUTH.googleSignIn();
+  if(!r) { lHideMsg(); return; }
+  if(r.message === '_redirect_') {
+    // Redirecting to Google — page will reload, show loading state
+    lMsg2('Redirecting to Google...','ok');
+    return;
+  }
+  if(r.success){
+    if(r.isNew){
+      lMsg2('Welcome! Fill in your business details below.','ok');
+      document.getElementById('lLF').style.display='none';
+      document.getElementById('lRF').style.display='block';
+      document.getElementById('lTL').classList.remove('on');
+      document.getElementById('lTR').classList.add('on');
+      if(r.user&&r.user.name){try{document.getElementById('rN').value=r.user.name;}catch(e){}}
+      if(r.user&&r.user.email){try{var em=document.getElementById('rEm');em.value=r.user.email;em.disabled=true;}catch(e){}}
+    } else {
+      lMsg2('Welcome back! Loading dashboard...','ok');
+      setTimeout(launchApp,900);
+    }
+  } else {
+    if(r.message==='Sign-in cancelled.'){
+      lHideMsg(); // Don't show error if user just closed the popup
+    } else {
+      lMsg2(r.message||'Google sign-in failed. Try email/password instead.','er');
+    }
+  }
+}
+document.addEventListener('DOMContentLoaded', async function(){
+  // Handle return from Google redirect sign-in
+  if(localStorage.getItem('sx_google_redirect')==='1'){
+    localStorage.removeItem('sx_google_redirect');
+    document.getElementById('loginScreen').classList.add('on');
+    lMsg2('Completing Google sign-in...','ok');
+    try {
+      var r = await STRATIX_AUTH.googleSignIn();
+      if(r && r.success){ lMsg2('Welcome! Loading...','ok'); setTimeout(launchApp,800); return; }
+      if(r && r.message && r.message !== '_redirect_'){ lMsg2(r.message,'er'); }
+      else { lHideMsg(); }
+    } catch(e){ lHideMsg(); }
+    return;
+  }
+  // Normal session check
+  if(typeof STRATIX_AUTH==='undefined'){document.getElementById('loginScreen').classList.add('on');return;}
+  var s=STRATIX_AUTH.getSession();
+  if(s){document.getElementById('loginScreen').classList.remove('on');launchApp();}
+  else{document.getElementById('loginScreen').classList.add('on');}
+});
+</script>
+
+<script>
+if('serviceWorker' in navigator){
+  window.addEventListener('load', function(){
+    navigator.serviceWorker.register('/sw.js')
+      .then(r => console.log('[STRATIX] SW registered ✓', r.scope))
+      .catch(e => console.log('[STRATIX] SW failed:', e));
+  });
+}
+</script>
+</body>
+</html>
